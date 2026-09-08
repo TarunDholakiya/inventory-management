@@ -73,13 +73,15 @@ class TestDemandEndpoints:
         # Check for the new items we added
         skus = [item["item_sku"] for item in data]
 
-        # Should have Temperature Sensor Module and Logic Controller Board
-        assert "SNR-420" in skus, "Missing Temperature Sensor Module"
-        assert "CTL-330" in skus, "Missing Logic Controller Board"
+        # SKUs updated to HMD-202/DSP-403: the restocking-feature data fix swapped every
+        # demand_forecasts.json SKU to one that actually exists in inventory.json (the old
+        # SNR-420/CTL-330 were fake placeholders that never matched any real item).
+        assert "HMD-202" in skus, "Missing Humidity Sensor Module"
+        assert "DSP-403" in skus, "Missing Digital Signal Processor"
 
         # Verify they are marked as stable
         for item in data:
-            if item["item_sku"] in ["SNR-420", "CTL-330"]:
+            if item["item_sku"] in ["HMD-202", "DSP-403"]:
                 assert item["trend"].lower() == "stable", \
                     f"New item {item['item_name']} should have stable trend"
 
